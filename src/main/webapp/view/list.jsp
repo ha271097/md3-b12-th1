@@ -13,6 +13,7 @@
 </head>
 <body>
 <h1>All Users</h1>
+<td><a href="/user?action=create">Add User</a></td>
 <form method="get">
     <table border="1">
         <tr>
@@ -20,7 +21,6 @@
             <td>Name: </td>
             <td>Email: </td>
             <td>Country: </td>
-            <td>Add User: </td>
             <td>Edit User: </td>
             <td>Delete User: </td>
         </tr>
@@ -30,15 +30,16 @@
                 <td>${u.name} </td>
                 <td>${u.email}</td>
                 <td>${u.country}</td>
-                <td><a href="/user?action=create">Add</a></td>
                 <td><a href="/user?action=edit&id=${u.id}">Edit</a></td>
                 <td><a href="/user?action=delete&id=${u.id}">Delete</a></td>
             </tr>
         </c:forEach>
     </table>
 </form>
-
-
-
+<h1>Search User</h1>
+<form method="post" action=user>
+    <input type="text" name="country" placeholder="Enter country">
+    <input type="submit" value="search" name="action">
+</form>
 </body>
 </html>

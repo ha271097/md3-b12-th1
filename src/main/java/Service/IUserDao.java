@@ -7,13 +7,15 @@ import java.util.List;
 
 public interface IUserDao {
 
-    public void insertUser(User user) throws SQLException;
+    void insertUser(User user) throws SQLException;
 
-    public User selectUser(int id);
+    User selectUser(int id);
 
-    public List<User> selectAllUsers();
+     List<User> selectAllUsers();
 
-    public void deleteUser(int id) throws SQLException;
+    void deleteUser(int id) throws SQLException;
 
-    public void updateUser(User user) throws SQLException;
+    void updateUser(User user) throws SQLException;
+
+    List<User> findUserByCountry(String country);
 }

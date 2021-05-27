@@ -36,6 +36,18 @@ public class UserServlet extends HttpServlet {
 
     }
 
+    private void searchUserByCountry(HttpServletRequest request, HttpServletResponse response) {
+        String country = request.getParameter("country");
+        List<User> listUserByCountry = userDao.findUserByCountry(country);
+        request.setAttribute("listUserByCountry", listUserByCountry);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("view/search.jsp");
+        try {
+            dispatcher.forward(request,response);
+        } catch (ServletException | IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void deleteUser(HttpServletRequest request, HttpServletResponse response) {
         int id = Integer.parseInt(request.getParameter("id"));
         try {
@@ -97,11 +109,15 @@ public class UserServlet extends HttpServlet {
                 case "edit":
                     updateUser(request, response);
                     break;
+                case "search":
+                    searchUserByCountry(request,response);
+                    break;
             }
         }catch (Exception ex){
             ex.printStackTrace();
         }
     }
+
 
     private void updateUser(HttpServletRequest request, HttpServletResponse response) {
         int id = Integer.parseInt(request.getParameter("id"));

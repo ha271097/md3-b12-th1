@@ -7,11 +7,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDAO implements IUserDao {
-    private static final String SELECT_USER_BY_ID = "SELECT * FROM user where id =?";
+    private static final String SELECT_USER_BY_ID = "SELECT * FROM user WHERE id =?";
     private static final String INSERT_USER_SQL = "INSERT INTO users" + "  (name, email, country) VALUES " +
         " (?, ?, ?);";
-    private static final String UPDATE_USER_SQL = "UPDATE user set name=?, email=?, country=? where id=?";
+    private static final String UPDATE_USER_SQL = "UPDATE user SET name=?, email=?, country=? WHERE id=?";
     private static final String DELETE_USER_SQL = "DELETE FROM user where id=?";
+    private static final String SELECT_USER_BY_COUNTRY = "SELECT * FROM user WHERE country like ?";
     private Connection getConnect(){
         Connection connection = null;
         try {
@@ -28,6 +29,30 @@ public class UserDAO implements IUserDao {
         }
 
         return connection;
+    }
+
+    @Override
+    public List<User> findUserByCountry(String country) {
+        String search = "%" + country + "%";
+        Connection connection = getConnect();
+        //day này
+        List <User> listUerByCountry = new ArrayList<>();
+
+        try {
+            PreparedStatement statement = connection.prepareStatement(SELECT_USER_BY_COUNTRY);
+            statement.setString(1,search);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()){
+                int id = resultSet.getInt("id");
+                String name = resultSet.getString("name");
+                String email = resultSet.getString("email");
+                String country1 = resultSet.getString("country");
+                listUerByCountry.add(new User(id, name, email, country1));
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return listUerByCountry;
     }
 
     @Override
@@ -68,11 +93,11 @@ public class UserDAO implements IUserDao {
 
     @Override
     public List<User> selectAllUsers() {
-        Connection c = getConnect();
-        PreparedStatement statement = null;
+        Connection c = getConnect();;
+        PreparedStatement statement;
         List<User> users = new ArrayList<>();
         try {
-            statement = c.prepareStatement("SELECT * FROM user");
+            statement = c.prepareStatement("SELECT * FROM user ORDER BY name");
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()){
                 int id = resultSet.getInt("id");
